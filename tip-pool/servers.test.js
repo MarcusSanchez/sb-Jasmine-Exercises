@@ -1,17 +1,36 @@
-describe("Servers test (with setup and tear-down)", function() {
-  beforeEach(function () {
-    // initialization logic
+describe("Servers test (with setup and tear-down)", () => {
+  beforeEach( () => {
     serverNameInput.value = 'Alice';
   });
 
-  it('should add a new server to allServers on submitServerInfo()', function () {
+  it('should add a new server to allServers on submitServerInfo()',  () => {
     submitServerInfo();
 
     expect(Object.keys(allServers).length).toEqual(1);
     expect(allServers['server' + serverId].serverName).toEqual('Alice');
   });
 
-  afterEach(function() {
-    // teardown logic
+  it('should not add a new server on submitServerInfo() with empty input',  () => {
+    serverNameInput.value = '';
+    submitServerInfo();
+
+    expect(Object.keys(allServers).length).toEqual(0);
+  });
+
+  it('should update #servertable on updateServerTable()',  () => {
+    submitServerInfo();
+    updateServerTable();
+
+    let curTdList = document.querySelectorAll('#serverTable tbody tr td');
+
+    expect(curTdList.length).toEqual(2);
+    expect(curTdList[0].innerText).toEqual('Alice');
+    expect(curTdList[1].innerText).toEqual('$0.00');
+  });
+
+  afterEach(() => {
+    serverId = 0;
+    serverTbody.innerHTML = '';
+    allServers = {};
   });
 });
